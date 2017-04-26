@@ -1,0 +1,34 @@
+#!/bin/bash
+
+name=`whoami`
+if [ "$name" != "nobody" ];then
+       echo "pls use user nobody"
+       exit 1
+fi
+
+if [ $# -ne 2 ];then
+	echo "Usage: `basename $0` filename revision"
+        exit 1
+fi
+
+svnfile=$1
+svnnum=$2
+if [ `ps -ef | grep  svn ` -eq 0 ];
+then
+	svnsign=`svn info $svnfile |awk -F 'URL|Repository' '{print $2}' |awk -F '/' '{printf "%s",$6}'`
+	if [ "$svnsign" == "svndir" ]
+	then
+		svn_user="svnuser"
+		svn_pass="svnpwd"
+	else
+		echo "unknow $svnsign"
+		exit 1
+
+	fi
+
+        svn up --username $svn_user --password $svn_pass --revision $svnnum --no-auth-cache $svnfile
+else
+        echo "wait 2 minute try again"
+	exit 1
+fi
+
