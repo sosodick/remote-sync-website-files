@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-# use for update gogogame module
-# code by chensiyao dick@eyugame.com
+# use for update remote webserver files
+# code by chensiyao
 
 import sys,os
 import subprocess
@@ -134,7 +134,7 @@ if __name__ == "__main__":
                                 ssh_key = conf_dic['ssh_key']
 				for host in hosts:
 					remote_cmd = 'sudo mkdir -p /data/backup/%s && if [ -d "%s" ];then sudo tar acf /data/backup/%s/%s-%s.tar.gz %s; fi && export RSYNC_PASSWORD=\'%s\' && sudo /usr/bin/rsync -vzrtopg --progress webuser@%s::%s %s/' % (module, remote_dir, module, now, module, remote_dir, rsync_key, rsync_host, module, remote_dir)
-					cmd = 'ssh -n -i %s -o StrictHostKeyChecking=no -p 23111 eyuAdmin@%s "%s"' % (ssh_key, host, remote_cmd)
+					cmd = 'ssh -n -i %s -o StrictHostKeyChecking=no -p 22 remoteUser@%s "%s"' % (ssh_key, host, remote_cmd)
 					if not RunShell(cmd):
 						logging.error('module: %s, host %s, rsync faild' % (module, host))
 						print 'module: %s, host %s, rsync faild' % (module, host)
